@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+pydantic
+pydantic_settings
+
+sqlalchemy
+sqlalchemy[asyncio]
+alembic
+
+pyjwt[crypto]
+bcrypt
+
+loguru

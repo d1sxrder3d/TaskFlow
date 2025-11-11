@@ -1,14 +1,20 @@
-from enum import Enum
 from typing import Optional
 
-from pydantic import EmailStr
 from sqlalchemy import String, LargeBinary
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from src.rest_api.app.db.models.organization import Organization
+from src.rest_api.app.db.models.project import Project
+from src.rest_api.app.db.models.task import Task
 
 from src.rest_api.app.db.base import BaseModel
 
 
-from src.rest_api.app.db.models.associations.user_associations import *
+from src.rest_api.app.db.models.associations.user_associations import (
+    association_user_organization,
+    association_user_project,
+    association_user_task
+)
 
 class User(BaseModel):
 

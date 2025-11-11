@@ -5,7 +5,6 @@ from src.rest_api.app.db.base import BaseModel
 
 
 
-
 class UserRole(str, PyEnum):
     OWNER = "owner"
     MANAGER = "manager"

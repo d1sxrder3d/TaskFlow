@@ -1,5 +1,7 @@
 from .task_associations import association_task_tag
-from .user_associations import *
+from .user_associations import (association_user_organization,
+                                association_user_project,
+                                association_user_task)
 
 
 __all__ = [

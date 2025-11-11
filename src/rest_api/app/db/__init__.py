@@ -2,11 +2,13 @@
 
 from src.rest_api.app.db.base import Base, BaseModel
 
-from src.rest_api.app.db.models.association_tables import *
+from src.rest_api.app.db.models.associations import *
 from src.rest_api.app.db.models.user import User
 from src.rest_api.app.db.models.organization import Organization
 from src.rest_api.app.db.models.project import Project
 from src.rest_api.app.db.models.task import Task
+from src.rest_api.app.db.models.tag import Tag
+from src.rest_api.app.db.models.file import File
 
 from src.rest_api.app.db.session import (
     DatabaseManager,
@@ -26,6 +28,8 @@ __all__ = [
     "Organization",
     "Project",
     "Task",
+    "File",
+    "Tag",
 
     "association_user_organization",
     "association_user_project",

@@ -1,10 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Request
+from fastapi import APIRouter, Depends, HTTPException, status, Request, Response
 
 from src.rest_api.app.api.v1.auth.service import AuthService
 from src.rest_api.app.api.v1.auth.schema import (
     LoginRequest,
-    RefreshTokenRequest,
-    TokenResponse,
     AccessTokenResponse,
     MessageResponse,
 )
@@ -17,11 +15,12 @@ router = APIRouter(
 )
 
 
-@router.post("/login", response_model=TokenResponse)
+@router.post("/login", response_model=AccessTokenResponse)
 async def login(
     login_data: LoginRequest,
     request: Request,
-    service: AuthService = Depends(get_auth_service),
+    response: Response,
+    service: AuthService = Depends(get_auth_service)
 ):
 
     ip_address = request.client.host if request.client else None
@@ -40,18 +39,23 @@ async def login(
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    try:
+        response.set_cookie(key="refresh_token", value=tokens["refresh_token"], httponly=True)
+    except KeyError:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to set refresh token cookie"
+        )
 
-    return tokens
+    return AccessTokenResponse(access_token=tokens["access_token"])
 
 
 @router.post("/refresh", response_model=AccessTokenResponse)
 async def refresh_token(
-    refresh_data: RefreshTokenRequest,
+    request: Request,
     service: AuthService = Depends(get_auth_service),
 ):
-    result = await service.refresh_access_token(refresh_data.refresh_token)
-    from src.rest_api.app.core.logging_config import logger
-    logger.info(result)
+    result = await service.refresh_access_token(request.cookies.get("refresh_token"))
 
     if not result:
         raise HTTPException(
@@ -65,10 +69,11 @@ async def refresh_token(
 
 @router.post("/logout", response_model=MessageResponse)
 async def logout(
-    refresh_data: RefreshTokenRequest,
-    service: AuthService = Depends(get_auth_service),
+    request: Request,
+    response: Response,
+    service: AuthService = Depends(get_auth_service)
 ):
-    success = await service.revoke_refresh_token(refresh_data.refresh_token)
+    success = await service.revoke_refresh_token(request.cookies.get("refresh_token"))
 
     if not success:
         raise HTTPException(
@@ -76,5 +81,12 @@ async def logout(
             detail="Refresh token not found"
         )
 
-    return MessageResponse(message="Successfully logged out")
+    try:
+        response.delete_cookie(key="refresh_token")
+    except KeyError:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to delete refresh token cookie"
+        )
 
+    return MessageResponse(message="Successfully logged out")

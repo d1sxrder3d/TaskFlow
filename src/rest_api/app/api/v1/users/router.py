@@ -1,6 +1,8 @@
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import Request
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.exc import IntegrityError
 
 from src.rest_api.app.api.v1.users.service import UserService
@@ -11,12 +13,18 @@ from src.rest_api.app.api.v1.users.schema import (
     UserListResponse,
 )
 from src.rest_api.app.core.dependencies import get_user_service
+from src.rest_api.app.core.security import decode_jwt
+from src.rest_api.app.repositories.user import UserRepository
+from src.rest_api.app.db import User
+from src.rest_api.app.core.dependencies import get_user_repository
 
 
 router = APIRouter(
     prefix="/users",
     tags=["users"],
 )
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
 
 @router.get("", response_model=UserListResponse)
@@ -25,6 +33,22 @@ async def get_users(
 ):
     users = await service.get_all_users()
     return UserListResponse(users=users, total=len(users))
+
+
+@router.get("/me", response_model=UserResponse)
+async def get_me(
+    token: str = Depends(oauth2_scheme),
+    user_repo: UserRepository = Depends(get_user_repository),
+):
+    try:
+        payload = decode_jwt(token)
+        user_id = int(payload.get("sub"))
+    except Exception:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    user = await user_repo.get(user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
 
 
 @router.get("/{user_id}", response_model=UserResponse)

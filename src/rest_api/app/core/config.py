@@ -67,7 +67,8 @@ class AuthSettings(BaseSettings):
     model_config = SettingsConfigDict(
         env_prefix="AUTH_",
         env_file=".env",
-        case_sensitive=False
+        case_sensitive=False,
+        extra="ignore"  # добавлено для игнорирования лишних переменных
     )
 
     private_key_path: Path = CERTS_DIR / "private.pem"

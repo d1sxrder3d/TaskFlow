@@ -98,32 +98,25 @@ class AuthService:
     ) -> Optional[Dict[str, str]]:
 
         auth_record = await self.auth_repo.get_refresh_token(refresh_token)
-        from src.rest_api.app.core.logging_config import logger
 
         if not auth_record:
-            logger.info("No auth record found for refresh token")
             return None
 
         if not auth_record.is_token_active:
-            logger.info("Refresh token is not active")
             return None
 
         if auth_record.token_expires_at < datetime.utcnow():
-            logger.info("Refresh token has expired")
             return None
 
         try:
             payload = decode_jwt(refresh_token)
-        except RuntimeError as e:
-            logger.info(e)
-            logger.info("Failed to decode refresh token")
+        except RuntimeError:
             return None
 
         user_id = int(payload.get("sub"))
         user = await self.user_repo.get(user_id)
 
         if not user or not user.is_active:
-            logger.info("Refresh token is not active 111")
             return None
 
         token_data = {

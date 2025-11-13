@@ -37,7 +37,7 @@ class Task(BaseModel):
 
     project = relationship(
         "Project",
-        back_populates="task"
+        back_populates="tasks"
     )
 
     tags: Mapped[list["Tag"]] = relationship(
@@ -45,4 +45,3 @@ class Task(BaseModel):
         secondary="tasks_tags",
         back_populates="tasks"
     )
-

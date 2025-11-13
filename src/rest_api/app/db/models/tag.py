@@ -2,8 +2,7 @@ from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.rest_api.app.db.base import BaseModel
-
-
+from src.rest_api.app.db.models.associations import association_task_tag
 
 
 class Tag(BaseModel):
@@ -13,6 +12,6 @@ class Tag(BaseModel):
     color: Mapped[str] = mapped_column(String(20), nullable=False)
 
     tasks: Mapped[list["Task"]] = relationship(
-        secondary="association_task_tag",
+        secondary=association_task_tag,
         back_populates="tags"
     )

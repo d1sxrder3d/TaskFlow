@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from sqlalchemy import String, LargeBinary
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -15,6 +15,9 @@ from src.rest_api.app.db.models.associations.user_associations import (
     association_user_project,
     association_user_task
 )
+
+if TYPE_CHECKING:
+    from src.rest_api.app.db.models.auth import Auth
 
 class User(BaseModel):
 
@@ -70,6 +73,11 @@ class User(BaseModel):
     tasks: Mapped[list["Task"]] = relationship(
         secondary=association_user_task,
         back_populates="users"
+    )
+
+    auth_tokens: Mapped[list["Auth"]] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan"
     )
 
     def __repr__(self) -> str:

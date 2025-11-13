@@ -9,6 +9,7 @@ from src.rest_api.app.db.models.project import Project
 from src.rest_api.app.db.models.task import Task
 from src.rest_api.app.db.models.tag import Tag
 from src.rest_api.app.db.models.file import File
+from src.rest_api.app.db.models.auth import Auth
 
 from src.rest_api.app.db.session import (
     DatabaseManager,
@@ -30,6 +31,7 @@ __all__ = [
     "Task",
     "File",
     "Tag",
+    "Auth",
 
     "association_user_organization",
     "association_user_project",

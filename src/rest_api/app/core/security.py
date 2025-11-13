@@ -1,16 +1,18 @@
 import bcrypt
 import jwt
+from datetime import datetime, timedelta, timezone
 
 from typing import Any
 
 from src.rest_api.app.core.config import settings
 
 
+#TODO: Кэширование ключей JWT для повышения производительности
 
 def encode_jwt(
     payload: dict[str, Any],
-    key: str = settings.auth_jwt.private_key_path.read_text(),
-    algorithm: str = settings.auth_jwt.algorithm
+    key: str = settings.auth.private_key_path.read_text(),
+    algorithm: str = settings.auth.algorithm
 ):
     try:
         return jwt.encode(payload, key, algorithm)
@@ -19,8 +21,8 @@ def encode_jwt(
 
 def decode_jwt(
     token: str | bytes,
-    key: str = settings.auth_jwt.private_key_path.read_text(),
-    algorithm: str = settings.auth_jwt.algorithm
+    key: str = settings.auth.private_key_path.read_text(),
+    algorithm: str = settings.auth.algorithm
 ):
     try:
         return jwt.decode(token, key, algorithms=[algorithm])
@@ -52,3 +54,15 @@ def validate_password(
         )
     except Exception as e:
         raise RuntimeError(f"Password validation failed: {e}")
+
+def create_access_token(data: dict[str, Any]) -> str:
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(minutes=settings.auth.access_token_expire_minutes)
+    to_encode["exp"] = expire
+    return encode_jwt(to_encode)
+
+def create_refresh_token(data: dict[str, Any]) -> str:
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(days=settings.auth.refresh_token_expire_days)
+    to_encode["exp"] = expire
+    return encode_jwt(to_encode)

@@ -1,4 +1,5 @@
 from functools import wraps
+
 from src.rest_api.app.core.config import settings
 
 def dev_only(func):

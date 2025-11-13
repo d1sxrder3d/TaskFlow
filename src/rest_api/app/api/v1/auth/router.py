@@ -50,6 +50,8 @@ async def refresh_token(
     service: AuthService = Depends(get_auth_service),
 ):
     result = await service.refresh_access_token(refresh_data.refresh_token)
+    from src.rest_api.app.core.logging_config import logger
+    logger.info(result)
 
     if not result:
         raise HTTPException(

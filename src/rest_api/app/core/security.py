@@ -21,7 +21,7 @@ def encode_jwt(
 
 def decode_jwt(
     token: str | bytes,
-    key: str = settings.auth.private_key_path.read_text(),
+    key: str = settings.auth.public_key_path.read_text(),
     algorithm: str = settings.auth.algorithm
 ):
     try:

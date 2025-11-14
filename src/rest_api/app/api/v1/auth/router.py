@@ -4,15 +4,36 @@ from src.rest_api.app.api.v1.auth.service import AuthService
 from src.rest_api.app.api.v1.auth.schema import (
     LoginRequest,
     AccessTokenResponse,
-    MessageResponse,
+    MessageResponse, RegisterRequest,
 )
 from src.rest_api.app.core.dependencies import get_auth_service
-
 
 router = APIRouter(
     prefix="/auth",
     tags=["auth"],
 )
+
+
+@router.post("/register", response_model=MessageResponse)
+async def register(
+    request_data: RegisterRequest,
+    service: AuthService = Depends(get_auth_service),
+):
+    success = await service.register(
+        username=request_data.username,
+        email=str(request_data.email),
+        password=request_data.password,
+        first_name=request_data.first_name,
+        last_name=request_data.last_name,
+    )
+
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User registration failed"
+        )
+
+    return MessageResponse(message="User registered successfully")
 
 
 @router.post("/login", response_model=AccessTokenResponse)

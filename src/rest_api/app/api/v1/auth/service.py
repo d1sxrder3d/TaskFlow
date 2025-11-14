@@ -3,14 +3,18 @@ from typing import Optional, Dict, Any
 
 from src.rest_api.app.repositories.auth import AuthRepository
 from src.rest_api.app.repositories.user import UserRepository
+
 from src.rest_api.app.db.models.user import User
+
 from src.rest_api.app.core.security import (
     validate_password,
     create_access_token,
     create_refresh_token,
-    decode_jwt,
+    decode_jwt, hash_password,
 )
+
 from src.rest_api.app.core.config import settings
+
 
 
 class AuthService:
@@ -58,7 +62,7 @@ class AuthService:
         access_token = create_access_token(token_data)
         refresh_token = create_refresh_token(token_data)
 
-        expires_at = datetime.utcnow() + timedelta(
+        expires_at = datetime.now(tz=timezone.utc) + timedelta(
             days=settings.auth.refresh_token_expire_days
         )
 
@@ -92,6 +96,30 @@ class AuthService:
         tokens = await self.create_tokens(user, ip_address, user_agent)
         return tokens
 
+    async def register(
+        self,
+        username: str,
+        email: str,
+        password: str,
+        first_name: Optional[str] = None,
+        last_name: Optional[str] = None,
+        is_active: bool = True,
+        is_superuser: bool = False,
+    ) -> User:
+        hashed_password = hash_password(password)
+
+        user = await self.user_repo.create(
+            username=username,
+            email=email,
+            hashed_password=hashed_password,
+            first_name=first_name,
+            last_name=last_name,
+            is_active=is_active,
+            is_superuser=is_superuser,
+        )
+
+        return user
+
     async def refresh_access_token(
         self,
         refresh_token: str
@@ -105,7 +133,7 @@ class AuthService:
         if not auth_record.is_token_active:
             return None
 
-        if auth_record.token_expires_at < datetime.utcnow():
+        if auth_record.token_expires_at.astimezone(timezone.utc) < datetime.now(timezone.utc):
             return None
 
         try:

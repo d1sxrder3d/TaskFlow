@@ -5,15 +5,6 @@ from pydantic import BaseModel, EmailStr, Field, ConfigDict
 
 
 
-class UserCreateRequest(BaseModel):
-    username: str = Field(..., min_length=3, max_length=255)
-    email: EmailStr
-    password: str = Field(..., min_length=8, max_length=128)
-    first_name: Optional[str] = Field(None, max_length=50)
-    last_name: Optional[str] = Field(None, max_length=50)
-    is_active: bool = True
-    is_superuser: bool = False
-
 
 class UserUpdateRequest(BaseModel):
     username: Optional[str] = Field(None, min_length=3, max_length=255)
@@ -23,8 +14,6 @@ class UserUpdateRequest(BaseModel):
     last_name: Optional[str] = Field(None, max_length=50)
     is_active: Optional[bool] = None
     is_superuser: Optional[bool] = None
-
-
 
 
 class UserResponse(BaseModel):

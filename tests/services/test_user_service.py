@@ -3,24 +3,6 @@ from unittest.mock import AsyncMock, MagicMock
 from src.rest_api.app.api.v1.users.service import UserService
 
 @pytest.mark.asyncio
-async def test_create_user():
-    repo = AsyncMock()
-    repo.create.return_value = MagicMock(id=1, username="test", email="test@example.com")
-    service = UserService(repo)
-    user = await service.create_user(
-        username="test",
-        email="test@example.com",
-        password="password123",
-        first_name="Test",
-        last_name="User",
-        is_active=True,
-        is_superuser=False
-    )
-    assert user.username == "test"
-    assert user.email == "test@example.com"
-    repo.create.assert_awaited()
-
-@pytest.mark.asyncio
 async def test_get_user_by_id():
     repo = AsyncMock()
     repo.get.return_value = MagicMock(id=1)
@@ -46,4 +28,3 @@ async def test_get_user_by_email():
     user = await service.get_user_by_email("test@example.com")
     assert user.email == "test@example.com"
     repo.get_by_email.assert_awaited_with("test@example.com")
-

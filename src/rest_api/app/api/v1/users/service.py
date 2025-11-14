@@ -31,31 +31,6 @@ class UserService:
         return await self.user_repo.get_by_email(email)
 
 
-    async def create_user(
-        self,
-        username: str,
-        email: str,
-        password: str,
-        first_name: Optional[str] = None,
-        last_name: Optional[str] = None,
-        is_active: bool = True,
-        is_superuser: bool = False,
-    ) -> User:
-        hashed_password = hash_password(password)
-
-        user = await self.user_repo.create(
-            username=username,
-            email=email,
-            hashed_password=hashed_password,
-            first_name=first_name,
-            last_name=last_name,
-            is_active=is_active,
-            is_superuser=is_superuser,
-        )
-
-        return user
-
-
     async def update_user(self, user_id: int, **kwargs) -> Optional[User]:
 
         if "password" in kwargs:

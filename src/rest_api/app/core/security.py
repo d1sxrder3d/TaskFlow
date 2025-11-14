@@ -62,12 +62,12 @@ def validate_password(
 
 def create_access_token(data: dict[str, Any]) -> str:
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(minutes=settings.auth.access_token_expire_minutes)
+    expire = datetime.now(tz=timezone.utc) + timedelta(minutes=settings.auth.access_token_expire_minutes)
     to_encode["exp"] = expire
     return encode_jwt(to_encode)
 
 def create_refresh_token(data: dict[str, Any]) -> str:
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(days=settings.auth.refresh_token_expire_days)
+    expire = datetime.now(tz=timezone.utc) + timedelta(days=settings.auth.refresh_token_expire_days)
     to_encode["exp"] = expire
     return encode_jwt(to_encode)

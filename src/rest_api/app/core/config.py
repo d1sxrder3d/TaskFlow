@@ -1,7 +1,7 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pathlib import Path
 from typing import Literal
-
+import os
 from dotenv import load_dotenv
 
 
@@ -16,7 +16,14 @@ except Exception as e:
 
 BASE_DIR: Path = Path(__file__).resolve().parent.parent
 
-DB_PATH: Path = BASE_DIR / "db.sqlite3"
+APP_ENV = os.getenv("APP_ENV", "dev")
+
+if APP_ENV == "test":
+    PROJECT_ROOT: Path = BASE_DIR.parent.parent.parent
+    DB_PATH: Path = PROJECT_ROOT / "tests" / "test_db.sqlite3"
+else:
+    DB_PATH: Path = BASE_DIR / "db.sqlite3"
+
 LOGS_DIR: Path = BASE_DIR / "logs"
 CERTS_DIR: Path = BASE_DIR / "certs"
 

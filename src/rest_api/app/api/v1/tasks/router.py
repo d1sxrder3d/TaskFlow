@@ -25,12 +25,12 @@ async def get_task(task_id: int, service: TaskService = Depends(get_task_service
 
 @router.post("/", response_model=TaskRead, status_code=status.HTTP_201_CREATED)
 async def create_task(task: TaskCreate, service: TaskService = Depends(get_task_service)):
-    return await service.create(**task.dict())
+    return await service.create(**task.model_dump())
 
 
 @router.patch("/{task_id}", response_model=TaskRead)
 async def update_task(task_id: int, task: TaskUpdate, service: TaskService = Depends(get_task_service)):
-    updated = await service.update(task_id, **task.dict(exclude_unset=True))
+    updated = await service.update(task_id, **task.model_dump())
     if not updated:
         raise HTTPException(status_code=404, detail="Task not found")
     return updated

@@ -23,12 +23,12 @@ async def get_tag(tag_id: int, service: TagService = Depends(get_tag_service)):
 
 @router.post("/", response_model=TagRead, status_code=status.HTTP_201_CREATED)
 async def create_tag(tag: TagCreate, service: TagService = Depends(get_tag_service)):
-    return await service.create(**tag.dict())
+    return await service.create(**tag.model_dump())
 
 
 @router.patch("/{tag_id}", response_model=TagRead)
 async def update_tag(tag_id: int, tag: TagUpdate, service: TagService = Depends(get_tag_service)):
-    updated = await service.update(tag_id, **tag.dict(exclude_unset=True))
+    updated = await service.update(tag_id, **tag.model_dump(exclude_unset=True))
     if not updated:
         raise HTTPException(status_code=404, detail="Tag not found")
     return updated

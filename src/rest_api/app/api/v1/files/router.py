@@ -23,12 +23,12 @@ async def get_file(file_id: int, service: FileService = Depends(get_file_service
 
 @router.post("/", response_model=FileRead, status_code=status.HTTP_201_CREATED)
 async def create_file(file: FileCreate, service: FileService = Depends(get_file_service)):
-    return await service.create(**file.dict())
+    return await service.create(**file.model_dump())
 
 
 @router.patch("/{file_id}", response_model=FileRead)
 async def update_file(file_id: int, file: FileUpdate, service: FileService = Depends(get_file_service)):
-    updated = await service.update(file_id, **file.dict(exclude_unset=True))
+    updated = await service.update(file_id, **file.model_dump(exclude_unset=True))
     if not updated:
         raise HTTPException(status_code=404, detail="File not found")
     return updated

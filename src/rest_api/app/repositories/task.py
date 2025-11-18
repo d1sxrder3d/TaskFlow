@@ -1,8 +1,8 @@
 from sqlalchemy import select
 
-from src.rest_api.app.repositories.base import BaseRepository
+from src.rest_api.app.core.bases import BaseRepository
 
-from src.rest_api.app.db import Task, User, Tag
+from src.rest_api.app.models import Task, User, Tag
 
 
 

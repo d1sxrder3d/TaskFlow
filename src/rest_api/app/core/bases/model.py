@@ -5,7 +5,7 @@ from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped, declared_attr
 
 
 
-class Base(DeclarativeBase):
+class DatabaseModel(DeclarativeBase):
 
     __abstract__ = True
 
@@ -20,7 +20,7 @@ class Base(DeclarativeBase):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns()}
 
 
-class BaseModel(Base):
+class BaseModel(DatabaseModel):
 
     __abstract__ = True
 

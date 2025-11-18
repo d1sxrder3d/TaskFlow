@@ -1,23 +1,27 @@
+from typing import TypeVar, Generic, Type, List, Optional
+
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.engine import Result
 from sqlalchemy.exc import IntegrityError
 
 
+ModelType = TypeVar("ModelType")
 
-class BaseRepository:
-    def __init__(self, model, db_session: AsyncSession):
+
+class BaseRepository(Generic[ModelType]):
+    def __init__(self, model: Type[ModelType], db_session: AsyncSession):
         self.db_session = db_session
         self.model = model
 
-    async def get_all(self):
+    async def get_all(self) -> List[ModelType]:
 
         stmt = select(self.model)
         result: Result = await self.db_session.execute(stmt)
 
-        return result.scalars().all()
+        return list(result.scalars().all())
 
-    async def get(self, id_: int):
+    async def get(self, id_: int) -> Optional[ModelType]:
 
         stmt = select(self.model).where(self.model.__table__.c.id == id_) # type: ignore
         result: Result = await self.db_session.execute(stmt)
@@ -39,7 +43,7 @@ class BaseRepository:
 
         return obj
 
-    async def update(self, id_: int, **kwargs):
+    async def update(self, id_: int, **kwargs) -> Optional[ModelType]:
         obj = await self.get(id_)
         if not obj:
             return None
@@ -58,7 +62,7 @@ class BaseRepository:
 
         return obj
 
-    async def delete(self, id_: int):
+    async def delete(self, id_: int) -> Optional[ModelType]:
 
         obj = await self.get(id_)
 

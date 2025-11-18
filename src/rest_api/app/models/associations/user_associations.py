@@ -1,7 +1,7 @@
 from enum import Enum as PyEnum
 from sqlalchemy import Table, Column, ForeignKey, Integer, UniqueConstraint, Enum
 
-from src.rest_api.app.db.base import BaseModel
+from src.rest_api.app.core.bases import BaseModel
 
 
 

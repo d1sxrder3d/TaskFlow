@@ -1,9 +1,18 @@
+from typing import TYPE_CHECKING
+
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
-from src.rest_api.app.db.base import BaseModel
+from src.rest_api.app.core.bases import BaseModel
 
-from src.rest_api.app.db.models.associations import association_user_organization
+from src.rest_api.app.models.associations import association_user_organization
+
+
+if TYPE_CHECKING:
+    from src.rest_api.app.models.user import User
+    from src.rest_api.app.models.project import Project
+
+
 
 class Organization(BaseModel):
 

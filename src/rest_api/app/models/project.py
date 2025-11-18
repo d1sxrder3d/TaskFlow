@@ -1,10 +1,13 @@
+from typing import TYPE_CHECKING
+
 from sqlalchemy import ForeignKey, String, Column, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.rest_api.app.db.base import BaseModel
+from src.rest_api.app.core.bases import BaseModel
+from src.rest_api.app.models.associations import association_user_project
 
-from src.rest_api.app.db.models.associations import association_user_project
-
+if TYPE_CHECKING:
+    from src.rest_api.app.models import User, Task, File
 
 class Project(BaseModel):
 

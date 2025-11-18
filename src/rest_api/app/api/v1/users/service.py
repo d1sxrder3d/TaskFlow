@@ -1,7 +1,7 @@
 from typing import Optional
 
 from src.rest_api.app.repositories.user import UserRepository
-from src.rest_api.app.db.models.user import User
+from src.rest_api.app.models.user import User
 from src.rest_api.app.core.security import hash_password
 
 

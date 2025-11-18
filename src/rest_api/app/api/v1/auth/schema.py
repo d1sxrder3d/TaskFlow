@@ -1,9 +1,10 @@
 from typing import Optional
 
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field, EmailStr, ConfigDict
 
 
 class LoginRequest(BaseModel):
+
     username: str = Field(..., description="Username или email")
     password: str = Field(..., min_length=8)
 

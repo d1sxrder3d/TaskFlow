@@ -3,10 +3,10 @@ from datetime import datetime, timezone
 from sqlalchemy import ForeignKey, Integer, String, DateTime, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.rest_api.app.db.base import Base
+from src.rest_api.app.core.bases import DatabaseModel
 
 
-class Auth(Base):
+class Auth(DatabaseModel):
     __tablename__ = "auth"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)

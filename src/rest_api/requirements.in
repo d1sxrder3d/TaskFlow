@@ -8,6 +8,7 @@ pydantic_settings
 #orm and migrations
 sqlalchemy
 sqlalchemy[asyncio]
+aiosqlite
 alembic
 
 #security

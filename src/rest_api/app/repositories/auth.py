@@ -1,7 +1,7 @@
 from sqlalchemy import select
 
-from src.rest_api.app.db.models.auth import Auth
-from src.rest_api.app.repositories.base import BaseRepository
+from src.rest_api.app.models.auth import Auth
+from src.rest_api.app.core.bases import BaseRepository
 
 
 class AuthRepository(BaseRepository):

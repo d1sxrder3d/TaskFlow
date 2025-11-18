@@ -4,6 +4,8 @@
 #
 #    pip-compile '.\requirements.in'
 #
+aiosqlite==0.21.0
+    # via -r requirements.in
 alembic==1.17.1
     # via -r requirements.in
 annotated-doc==0.0.3
@@ -97,6 +99,7 @@ starlette==0.49.3
     # via fastapi
 typing-extensions==4.15.0
     # via
+    #   aiosqlite
     #   alembic
     #   fastapi
     #   pydantic

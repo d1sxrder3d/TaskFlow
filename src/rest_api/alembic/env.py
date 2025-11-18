@@ -19,8 +19,10 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 
-from src.rest_api.app.db import Base
-target_metadata = Base.metadata
+from src.rest_api.app.core.bases.model import DatabaseModel
+from src.rest_api.app.models import *
+
+target_metadata = DatabaseModel.metadata
 
 from src.rest_api.app.core.config import settings
 

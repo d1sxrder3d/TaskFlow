@@ -3,7 +3,7 @@ from enum import Enum as PyEnum
 from sqlalchemy import String, Integer, ForeignKey, Column, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.rest_api.app.db.base import BaseModel
+from src.rest_api.app.core.bases import BaseModel
 
 
 

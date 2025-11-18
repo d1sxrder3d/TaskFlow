@@ -7,6 +7,8 @@ from src.rest_api.app.core.logging_config import setup_uvicorn_loggers, logger
 from src.rest_api.app.db import init_db, DatabaseManager
 from src.rest_api.app.api import main_api_router
 
+
+# noinspection PyUnusedLocal
 @asynccontextmanager
 async def lifespan(app: FastAPI):
 
@@ -33,7 +35,7 @@ app = FastAPI(
 
 app.include_router(main_api_router)
 
+setup_uvicorn_loggers()
 
 if __name__ == "__main__":
-    setup_uvicorn_loggers()
     uvicorn.run(app, log_config=None)

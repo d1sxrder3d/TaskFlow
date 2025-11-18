@@ -3,21 +3,23 @@ from typing import Optional, TYPE_CHECKING
 from sqlalchemy import String, LargeBinary
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.rest_api.app.db.models.organization import Organization
-from src.rest_api.app.db.models.project import Project
-from src.rest_api.app.db.models.task import Task
-
-from src.rest_api.app.db.base import BaseModel
+from src.rest_api.app.core.bases import BaseModel
 
 
-from src.rest_api.app.db.models.associations.user_associations import (
+from src.rest_api.app.models.associations.user_associations import (
     association_user_organization,
     association_user_project,
     association_user_task
 )
 
+
 if TYPE_CHECKING:
-    from src.rest_api.app.db.models.auth import Auth
+    from src.rest_api.app.models.auth import Auth
+    from src.rest_api.app.models.organization import Organization
+    from src.rest_api.app.models.project import Project
+    from src.rest_api.app.models.task import Task
+
+
 
 class User(BaseModel):
 
@@ -82,4 +84,3 @@ class User(BaseModel):
 
     def __repr__(self) -> str:
         return f"<User(id={self.id}, username={self.username}, email={self.email})>"
-

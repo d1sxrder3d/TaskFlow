@@ -1,6 +1,6 @@
 from sqlalchemy import Column, ForeignKey, Integer, Table, UniqueConstraint
 
-from src.rest_api.app.db.base import BaseModel
+from src.rest_api.app.core.bases import BaseModel
 
 association_task_tag = Table(
     "tasks_tags",

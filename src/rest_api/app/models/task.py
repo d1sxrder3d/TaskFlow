@@ -1,12 +1,14 @@
 from enum import Enum as PyEnum
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Column, String, Text, Enum, ForeignKey, Integer
 from sqlalchemy.orm import relationship, Mapped
 
-from src.rest_api.app.db.base import BaseModel
+from src.rest_api.app.core.bases import BaseModel
+from src.rest_api.app.models.associations import association_user_task
 
-from src.rest_api.app.db.models.tag import Tag
-from src.rest_api.app.db.models.associations import association_user_task
+if TYPE_CHECKING:
+    from src.rest_api.app.models import User, Tag
 
 
 class TaskStatus(str, PyEnum):

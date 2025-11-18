@@ -4,7 +4,7 @@ from typing import Optional, Dict, Any
 from src.rest_api.app.repositories.auth import AuthRepository
 from src.rest_api.app.repositories.user import UserRepository
 
-from src.rest_api.app.db.models.user import User
+from src.rest_api.app.models.user import User
 
 from src.rest_api.app.core.security import (
     validate_password,

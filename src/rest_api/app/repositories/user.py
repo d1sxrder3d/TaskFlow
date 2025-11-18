@@ -1,8 +1,8 @@
 from sqlalchemy import select
 
-from src.rest_api.app.repositories.base import BaseRepository
+from src.rest_api.app.core.bases import BaseRepository
 
-from src.rest_api.app.db import User, Organization, Project
+from src.rest_api.app.models import User, Organization, Project
 
 
 
@@ -35,7 +35,7 @@ class UserRepository(BaseRepository):
 
     async def get_by_task(self, task_id: int) -> list[User]:
         """ Get all users associated with a given task """
-        from src.rest_api.app.db.models.task import Task
+        from src.rest_api.app.models import Task
         stmt = select(User).join(User.tasks).where(Task.id == task_id)
         result = await self.db_session.execute(stmt)
         return list(result.scalars().all())

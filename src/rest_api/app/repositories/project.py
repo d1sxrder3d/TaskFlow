@@ -1,6 +1,6 @@
-from src.rest_api.app.repositories.base import BaseRepository
+from src.rest_api.app.core.bases import BaseRepository
 
-from src.rest_api.app.db import Project
+from src.rest_api.app.models import Project
 
 
 

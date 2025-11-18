@@ -5,7 +5,6 @@ from pydantic import BaseModel, EmailStr, Field, ConfigDict
 
 
 
-
 class UserUpdateRequest(BaseModel):
     username: Optional[str] = Field(None, min_length=3, max_length=255)
     email: Optional[EmailStr] = None

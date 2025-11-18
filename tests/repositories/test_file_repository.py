@@ -2,6 +2,7 @@ import pytest
 from unittest.mock import AsyncMock, MagicMock
 from src.rest_api.app.repositories.file import FileRepository
 
+
 @pytest.mark.asyncio
 async def test_get_by_mime_type():
     db = AsyncMock()
@@ -14,6 +15,7 @@ async def test_get_by_mime_type():
     result = await repo.get_by_mime_type("image/png")
     assert result == ["file1"]
     db.execute.assert_awaited()
+
 
 @pytest.mark.asyncio
 async def test_get_by_project():

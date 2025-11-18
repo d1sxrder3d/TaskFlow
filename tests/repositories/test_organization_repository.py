@@ -2,6 +2,7 @@ import pytest
 from unittest.mock import AsyncMock, MagicMock
 from src.rest_api.app.repositories.organization import OrganizationRepository
 
+
 @pytest.mark.asyncio
 async def test_get_by_owner_id():
     db = AsyncMock()

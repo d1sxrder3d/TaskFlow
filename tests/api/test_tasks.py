@@ -104,7 +104,7 @@ def test_delete_task(auth_client):
     task_id = create_resp.json()["id"]
 
     response = auth_client.delete(f"/api/v1/tasks/{task_id}")
-    assert response.status_code == 20
+    assert response.status_code == 204
 
     response = auth_client.get(f"/api/v1/tasks/{task_id}")
     assert response.status_code == 404

@@ -83,20 +83,20 @@ async def get_session() -> AsyncSession:
 
 @dev_only
 async def init_db() -> None:
-    from src.rest_api.app.db.base import Base
+    from src.rest_api.app.core.bases import DatabaseModel
 
     engine = await get_engine()
 
     async with engine.begin() as conn:
 
-        await conn.run_sync(Base.metadata.create_all)
+        await conn.run_sync(DatabaseModel.metadata.create_all)
 
     logger.info("Database tables created successfully")
 
 
 @dev_only
 async def drop_db() -> None:
-    from src.rest_api.app.db.base import Base
+    from src.rest_api.app.core.bases.model import DatabaseModel
 
     if not settings.is_debug:
         raise RuntimeError("Cannot drop database in production!")
@@ -104,6 +104,6 @@ async def drop_db() -> None:
     engine = await get_engine()
 
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
+        await conn.run_sync(DatabaseModel.metadata.drop_all)
 
     logger.warning("All database tables dropped")

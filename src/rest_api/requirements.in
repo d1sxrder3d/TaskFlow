@@ -1,13 +1,24 @@
+# core dependencies
 fastapi
 uvicorn
 pydantic
+pydantic[email]
 pydantic_settings
 
+#orm and migrations
 sqlalchemy
 sqlalchemy[asyncio]
+aiosqlite
 alembic
 
+#security
 pyjwt[crypto]
 bcrypt
 
+#logging
 loguru
+
+#tests
+pytest
+pytest-asyncio
+httpx

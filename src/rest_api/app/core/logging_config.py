@@ -23,7 +23,7 @@ def setup_logger(mode: Literal["dev", "debug", "prod"] = "dev"):
         logger.add(
             sys.stdout,
             format=LOG_FORMAT,
-            level="INFO",
+            level="DEBUG",
             colorize=True,
             enqueue=True,
             backtrace=True,

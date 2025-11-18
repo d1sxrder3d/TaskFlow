@@ -30,8 +30,8 @@ class TaskUpdate(BaseModel):
 
 class TaskRead(TaskBase):
     id: int
-    class Config:
-        orm_mode = True
+
+    model_config = {"from_attributes": True}
 
 
 class TaskWithRelations(TaskRead):

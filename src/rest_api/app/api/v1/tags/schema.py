@@ -21,4 +21,4 @@ class TagUpdate(BaseModel):
 class TagRead(TagBase):
     id: int
     class Config:
-        orm_mode = True
+        from_attributes = True

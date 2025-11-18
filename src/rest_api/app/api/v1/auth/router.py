@@ -60,13 +60,8 @@ async def login(
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    try:
-        response.set_cookie(key="refresh_token", value=tokens["refresh_token"], httponly=True)
-    except KeyError:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to set refresh token cookie"
-        )
+
+    response.set_cookie(key="refresh_token", value=tokens["refresh_token"], httponly=True)
 
     return AccessTokenResponse(access_token=tokens["access_token"])
 
@@ -76,7 +71,16 @@ async def refresh_token(
     request: Request,
     service: AuthService = Depends(get_auth_service),
 ):
-    result = await service.refresh_access_token(request.cookies.get("refresh_token"))
+
+    _refresh_token = request.cookies.get("refresh_token")
+
+    if not _refresh_token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Refresh token missing",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    result = await service.refresh_access_token(_refresh_token)
 
     if not result:
         raise HTTPException(
@@ -102,12 +106,6 @@ async def logout(
             detail="Refresh token not found"
         )
 
-    try:
-        response.delete_cookie(key="refresh_token")
-    except KeyError:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to delete refresh token cookie"
-        )
+    response.delete_cookie(key="refresh_token")
 
     return MessageResponse(message="Successfully logged out")

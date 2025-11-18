@@ -13,7 +13,6 @@ class OrganizationResponse(BaseModel):
     id: int
     name: str
     owner_id: int
-    # Можно добавить users и projects при необходимости
 
 class OrganizationListResponse(BaseModel):
     organizations: List[OrganizationResponse]

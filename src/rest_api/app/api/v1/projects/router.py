@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
-from src.rest_api.app.api.v1.projects.schema import ProjectCreate, ProjectRead, ProjectUpdate, ProjectWithRelations
+from src.rest_api.app.api.v1.projects.schema import ProjectCreate, ProjectRead, ProjectUpdate
 from src.rest_api.app.api.v1.projects.service import ProjectService
 from src.rest_api.app.core.dependencies.project import get_project_service
 
@@ -25,12 +25,12 @@ async def get_project(project_id: int, service: ProjectService = Depends(get_pro
 
 @router.post("/", response_model=ProjectRead, status_code=status.HTTP_201_CREATED)
 async def create_project(project: ProjectCreate, service: ProjectService = Depends(get_project_service)):
-    return await service.create(**project.dict())
+    return await service.create(**project.model_dump(exclude_unset=True))
 
 
 @router.put("/{project_id}", response_model=ProjectRead)
 async def update_project(project_id: int, project: ProjectUpdate, service: ProjectService = Depends(get_project_service)):
-    updated = await service.update(project_id, **project.dict(exclude_unset=True))
+    updated = await service.update(project_id, **project.model_dump(exclude_unset=True))
     if not updated:
         raise HTTPException(status_code=404, detail="Project not found")
     return updated
